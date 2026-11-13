@@ -102,6 +102,30 @@ updateScroll();
 topButton.addEventListener('click', () => { document.querySelector('.brand').focus({ preventScroll: true }); window.scrollTo({ top: 0, behavior: window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'instant' : 'smooth' }); });
 
 const projects = {
+  smartbudget: {
+    title: 'Smart Budget – Personal Finance Management App',
+    type: '2026 · MOBILE APPLICATION · UI Design & Mobile App Development',
+    providedDetails: true,
+    description: 'Smart Budget is a personal finance management mobile application designed to help users manage their money efficiently. It allows users to track income, record expenses, monitor their available balance, and manage monthly budgets. The application features a clean, modern, and user-friendly interface that makes personal budgeting simple and organized.',
+    scope: [
+      'User Authentication: Login and account registration interfaces for users.',
+      'Financial Dashboard: Displays total balance, income, and expenses.',
+      'Income Management: Allows users to record and manage income.',
+      'Expense Tracking: Helps users monitor and organize expenses.',
+      'Monthly Budget Monitoring: Displays monthly spending limits and remaining budgets.',
+      'Transaction History: Provides access to previous financial transactions.',
+      'Quick Actions: Easy access to income, expenses, and transaction history.',
+      'Mobile-Friendly Interface: Clean and responsive layouts designed for mobile devices.'
+    ],
+    technologies: ['Technology stack to be confirmed from project files'],
+    contribution: 'Contributed to the design and development of Smart Budget by creating its mobile interface, organizing the authentication screens, designing the financial dashboard, and implementing user-friendly navigation. Focused on providing a simple and organized experience for managing personal finances.',
+    objective: 'To develop a user-friendly personal finance application that helps users track their income, monitor expenses, manage budgets, and develop better financial habits.',
+    gallery: [
+      { src: 'assets/images/smart-budget/login.png', title: 'Login', alt: 'Smart Budget login screen with email, password, show password option, and create account navigation' },
+      { src: 'assets/images/smart-budget/registration.png', title: 'Registration', alt: 'Smart Budget registration screen with full name, email, password, and password confirmation' },
+      { src: 'assets/images/smart-budget/dashboard.png', title: 'Dashboard', alt: 'Smart Budget dashboard with balance, income, expenses, quick actions, monthly budget, and bottom navigation' }
+    ]
+  },
   cafe: {
     title: 'Café Rencontre',
     type: '2025 · CAFÉ WEBSITE · Role: UI Design',
@@ -158,6 +182,87 @@ function validPublicUrl(value) {
 }
 const dialog = document.querySelector('#project-dialog');
 let dialogTrigger;
+
+// A second native dialog enlarges the ordered mobile screenshot gallery while
+// keeping project details open underneath, including keyboard focus handling.
+const screenshotDialog = document.querySelector('#screenshot-dialog');
+const screenshotImage = document.querySelector('#screenshot-image');
+const pendingScreenshot = 'assets/images/smart-budget/preview-pending.svg';
+let activeGallery = [];
+let screenshotIndex = 0;
+let screenshotTrigger;
+
+function showScreenshot(index) {
+  screenshotIndex = (index + activeGallery.length) % activeGallery.length;
+  const screenshot = activeGallery[screenshotIndex];
+  document.querySelector('#screenshot-title').textContent = screenshot.title;
+  document.querySelector('#screenshot-counter').textContent = `${screenshotIndex + 1} / ${activeGallery.length}`;
+  screenshotImage.onerror = () => {
+    screenshotImage.onerror = null;
+    screenshotImage.src = pendingScreenshot;
+    screenshotImage.alt = `${screenshot.title} screenshot pending — original image not supplied`;
+    document.querySelector('#screenshot-title').textContent = `${screenshot.title} — screenshot pending`;
+  };
+  screenshotImage.alt = screenshot.alt;
+  screenshotImage.src = screenshot.src;
+  if (screenshotImage.animate && !matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    screenshotImage.animate([{ opacity: .3 }, { opacity: 1 }], { duration: 180 });
+  }
+}
+
+function renderGallery(project) {
+  const section = document.querySelector('#dialog-gallery');
+  const thumbnails = document.querySelector('#gallery-thumbnails');
+  section.hidden = !project.gallery?.length;
+  activeGallery = project.gallery || [];
+  thumbnails.replaceChildren();
+  activeGallery.forEach((screenshot, index) => {
+    const button = document.createElement('button');
+    button.type = 'button';
+    button.className = 'screenshot-thumbnail';
+    button.setAttribute('aria-haspopup', 'dialog');
+    button.setAttribute('aria-label', `Enlarge ${screenshot.title} screenshot`);
+    const image = document.createElement('img');
+    image.alt = screenshot.alt;
+    image.width = 600;
+    image.height = 900;
+    const caption = document.createElement('span');
+    caption.textContent = `${index + 1}. ${screenshot.title}`;
+    image.onerror = () => {
+      image.onerror = null;
+      image.src = pendingScreenshot;
+      image.alt = `${screenshot.title} screenshot pending — original image not supplied`;
+      caption.textContent = `${index + 1}. ${screenshot.title} — pending`;
+      button.setAttribute('aria-label', `Enlarge ${screenshot.title} screenshot placeholder`);
+    };
+    image.src = screenshot.src;
+    button.append(image, caption);
+    button.addEventListener('click', () => {
+      screenshotTrigger = button;
+      showScreenshot(index);
+      screenshotDialog.showModal();
+    });
+    thumbnails.append(button);
+  });
+}
+document.querySelector('#close-screenshot').addEventListener('click', () => screenshotDialog.close());
+document.querySelector('#previous-screenshot').addEventListener('click', () => showScreenshot(screenshotIndex - 1));
+document.querySelector('#next-screenshot').addEventListener('click', () => showScreenshot(screenshotIndex + 1));
+screenshotDialog.addEventListener('keydown', event => {
+  if (event.key === 'ArrowLeft' || event.key === 'ArrowRight') {
+    event.preventDefault();
+    showScreenshot(screenshotIndex + (event.key === 'ArrowRight' ? 1 : -1));
+  }
+});
+screenshotDialog.addEventListener('click', event => {
+  if (event.target !== screenshotDialog) return;
+  const box = screenshotDialog.getBoundingClientRect();
+  if (event.clientX < box.left || event.clientX > box.right || event.clientY < box.top || event.clientY > box.bottom) screenshotDialog.close();
+});
+screenshotDialog.addEventListener('close', () => {
+  if (dialog.open && screenshotTrigger?.isConnected && (document.activeElement === document.body || screenshotDialog.contains(document.activeElement))) screenshotTrigger.focus();
+});
+
 document.querySelectorAll('[data-project]').forEach(button => button.addEventListener('click', () => {
   const project = projects[button.dataset.project];
   dialogTrigger = button;
@@ -174,10 +279,12 @@ document.querySelectorAll('[data-project]').forEach(button => button.addEventLis
   });
   const sourceImage = button.closest('article').querySelector('img');
   const modalImage = document.querySelector('#dialog-image');
-  const fallbackImages = { labtrack: 'assets/images/project1.svg', grades: 'assets/images/project2.svg', library: 'assets/images/project3.svg', cafe: 'assets/images/cafe-website.svg', webproject: 'assets/images/web-project.svg' };
+  const fallbackImages = { labtrack: 'assets/images/project1.svg', grades: 'assets/images/project2.svg', library: 'assets/images/project3.svg', cafe: 'assets/images/cafe-website.svg', webproject: 'assets/images/web-project.svg', smartbudget: pendingScreenshot };
   modalImage.onerror = () => { modalImage.onerror = null; modalImage.src = fallbackImages[button.dataset.project]; };
   modalImage.src = sourceImage.currentSrc || sourceImage.src;
   modalImage.alt = sourceImage.alt;
+  modalImage.hidden = Boolean(project.gallery?.length);
+  renderGallery(project);
   const scope = document.querySelector('#dialog-scope');
   scope.replaceChildren(...project.scope.map(text => { const item = document.createElement('li'); item.textContent = text; return item; }));
   document.querySelector('#dialog-technologies').replaceChildren(...project.technologies.map(text => { const tag = document.createElement('span'); tag.textContent = text; return tag; }));
@@ -218,8 +325,9 @@ document.querySelectorAll('[data-project]').forEach(button => button.addEventLis
   document.body.style.overflow = 'hidden';
 }));
 document.querySelector('#close-dialog').addEventListener('click', () => dialog.close());
-dialog.addEventListener('click', event => { const box = dialog.getBoundingClientRect(); if (event.clientX < box.left || event.clientX > box.right || event.clientY < box.top || event.clientY > box.bottom) dialog.close(); });
+dialog.addEventListener('click', event => { if (event.target !== dialog) return; const box = dialog.getBoundingClientRect(); if (event.clientX < box.left || event.clientX > box.right || event.clientY < box.top || event.clientY > box.bottom) dialog.close(); });
 dialog.addEventListener('close', () => {
+  if (screenshotDialog.open) screenshotDialog.close();
   document.body.style.overflow = '';
   // Native dialogs normally restore focus. Only supply a fallback if focus was
   // lost; a queued close event must not pull focus away from another control.

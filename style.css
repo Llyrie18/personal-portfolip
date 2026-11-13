@@ -1014,3 +1014,27 @@ input:focus, textarea:focus {
 /* Supplied achievement documents: keep the original list, with readable previews. */ .achievement-row{grid-template-columns:110px minmax(0,1fr) auto}.achievement-thumbnail{display:flex;align-items:center;justify-content:center;width:110px;min-height:78px;border:1px solid var(--border);border-radius:9px;padding:5px;background:var(--card);transition:border-color .18s,box-shadow .18s}.achievement-thumbnail img{width:100%;height:auto;object-fit:contain;border-radius:3px}.achievement-thumbnail:hover{border-color:var(--purple);box-shadow:0 3px 12px #7c3aed18}.achievement-certificate-link{display:inline-flex;align-items:center;gap:9px;min-height:44px;color:var(--purple);font-size:11px;font-weight:600}.achievement-certificate-link:hover{text-decoration:underline}.achievement-row>.achievement-icon{justify-self:center}@media(max-width:767px){.achievement-row{grid-template-columns:70px minmax(0,1fr)}.achievement-thumbnail{width:70px;min-height:54px}.achievement-date{grid-column:2}}
 .project-type{color:var(--purple);font-size:12px;font-weight:600}.project-stack{display:grid;grid-template-columns:145px minmax(0,1fr);gap:10px 16px;padding:16px;background:var(--light);border-radius:9px;font-size:12px}.project-stack dt{font-weight:600;color:var(--text)}.project-stack dd{margin:0;color:var(--muted);overflow-wrap:anywhere}@media(max-width:520px){.project-stack{grid-template-columns:1fr;gap:4px}.project-stack dd{margin-bottom:10px}}
 .project-content .project-card-meta{min-height:0;margin:8px 0 0;font-size:9px;font-weight:600;color:var(--purple);letter-spacing:.4px}
+/* Smart Budget: existing card styling with uncropped mobile previews. */
+.smart-budget-card { --project-accent:var(--purple); --project-soft:var(--lavender); }
+.project-card > .mobile-project-preview { object-fit:contain; background:var(--light); }
+.project-content .project-card-role { min-height:0; font-size:10px; margin:10px 0; color:var(--text); }
+.project-card-features { padding-left:17px; margin:0 0 18px; font-size:10px; color:var(--muted); line-height:1.8; }
+.project-card-features li::marker { color:var(--purple); }
+.project-gallery { margin:22px 0; }
+.gallery-help { font-size:11px; }
+.gallery-thumbnails { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:12px; }
+.screenshot-thumbnail { padding:9px; background:var(--bg); border:1px solid var(--border); border-radius:10px; min-width:0; transition:border-color .18s,box-shadow .18s; }
+.screenshot-thumbnail:hover { border-color:var(--purple); box-shadow:0 4px 16px #7c3aed18; }
+.screenshot-thumbnail img { width:100%; height:240px; object-fit:contain; background:var(--card); border-radius:6px; }
+.screenshot-thumbnail span { display:block; font-size:11px; margin-top:9px; color:var(--text); }
+.screenshot-dialog { width:min(820px,calc(100% - 24px)); max-height:94vh; padding:26px; }
+.screenshot-viewer-image { width:100%; height:min(65vh,800px); object-fit:contain; margin:20px 0; border-radius:9px; background:var(--bg); }
+.screenshot-controls { display:flex; align-items:center; justify-content:space-between; gap:10px; }
+.screenshot-controls .button { width:auto; min-width:0; gap:6px; padding:9px 13px; }
+.screenshot-controls [role=status] { font-size:11px; white-space:nowrap; color:var(--muted); }
+@media(max-width:520px) {
+  .gallery-thumbnails { grid-template-columns:1fr; }
+  .screenshot-thumbnail img { height:270px; }
+  .screenshot-dialog { padding:20px; }
+  .screenshot-controls .button { font-size:11px; padding:9px 10px; }
+}
