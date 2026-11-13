@@ -4,7 +4,6 @@ const portfolio = {
   email: 'Eirelltampoc18@gmail.com',
   github: 'https://github.com/Llyrie18',
   facebook: 'https://www.facebook.com/Eiryll18',
-  linkedin: '',
   repositories: { labtrack: '', grades: '', library: '', cafe: '', webproject: '' }
 };
 
@@ -43,7 +42,7 @@ document.querySelectorAll('.skill-tile').forEach(tile => {
 
 const root = document.documentElement;
 // Keep recognizable icons visible when the external icon font is unavailable.
-const iconFallbacks = { 'fa-facebook-f': 'f', 'fa-code': '</>', 'fa-android': 'A', 'fa-html5': '5', 'fa-css3-alt': '3', 'fa-js': 'JS', 'fa-java': '♨', 'fa-python': 'Py', 'fa-php': 'php', 'fa-database': '▤', 'fa-git-alt': '◇', 'fa-graduation-cap': '◇', 'fa-building-columns': '⌂', 'fa-calendar': '▦', 'fa-award': '☆', 'fa-certificate': '▧', 'fa-envelope': '✉', 'fa-github': 'GH', 'fa-linkedin-in': 'in', 'fa-location-dot': '⌖' };
+const iconFallbacks = { 'fa-facebook-f': 'f', 'fa-code': '</>', 'fa-android': 'A', 'fa-html5': '5', 'fa-css3-alt': '3', 'fa-js': 'JS', 'fa-java': '♨', 'fa-python': 'Py', 'fa-php': 'php', 'fa-database': '▤', 'fa-git-alt': '◇', 'fa-graduation-cap': '◇', 'fa-building-columns': '⌂', 'fa-calendar': '▦', 'fa-award': '☆', 'fa-certificate': '▧', 'fa-envelope': '✉', 'fa-github': 'GH', 'fa-location-dot': '⌖' };
 document.querySelectorAll('i[class*="fa-"]').forEach(icon => {
   const key = Object.keys(iconFallbacks).find(name => icon.classList.contains(name));
   icon.dataset.symbol = iconFallbacks[key] || '•';
@@ -105,7 +104,34 @@ topButton.addEventListener('click', () => { document.querySelector('.brand').foc
 const projects = {
   cafe: { title: 'Café Website', description: 'Website available at caferecontre.vercel.app. The official project title, description, and contribution details have not yet been provided.', scope: ['Project features and your contribution: to be added.'], technologies: ['Technology stack to be provided'], liveUrl: 'https://caferecontre.vercel.app/' },
   webproject: { title: 'Web Project', description: 'Website available at vercel-live-20261031-182539.vercel.app. The project title, description, and contribution details have not yet been provided.', scope: ['Project features and your contribution: to be added.'], technologies: ['Technology stack to be provided'], liveUrl: 'https://vercel-live-20261031-182539.vercel.app/' },
-  labtrack: { title: 'LabTrack — RFID-Based Computer Laboratory Tracking System', description: 'A computer laboratory monitoring system that uses RFID technology to authenticate students, track computer usage, and help administrators manage laboratory activities.', scope: ['RFID-based student authentication', 'Computer usage and laboratory activity tracking', 'Administrative monitoring of laboratory records'], technologies: ['HTML', 'CSS', 'JavaScript', 'PHP', 'MySQL', 'RFID', 'Arduino / ESP32'] },
+  labtrack: {
+    title: 'LabTrack — RFID-Based Computer Laboratory Monitoring System',
+    type: 'Capstone Project / System Development',
+    providedDetails: true,
+    description: 'LabTrack is an RFID-based computer laboratory monitoring and student authentication system designed to improve laboratory security, student tracking, and computer management. It allows students to verify their identity using RFID cards before accessing laboratory computers. The system helps administrators monitor computer usage, manage laboratory sessions, and maintain accurate student activity records.',
+    scope: [
+      'RFID Student Authentication: Students tap their registered RFID cards to verify their identity before accessing laboratory computers.',
+      'Computer Access Control: Students enter their Student ID in the desktop application to unlock and use a laboratory computer after verification.',
+      'Real-Time Computer Monitoring: Administrators can monitor computer availability, student logins, and active laboratory sessions.',
+      'Admin and Superadmin Dashboard: Role-based access for managing laboratories, student records, requests, and system operations.',
+      'Session History: Records student information, assigned computer, login and logout times, and session duration.',
+      'Manual Student Verification: Allows administrators to approve students who forgot or lost their RFID cards.',
+      'Reports and Analytics: Provides laboratory usage records, student activity summaries, and monitoring reports.',
+      'Laboratory Management: Allows administrators to manage multiple laboratories and report computers that are out of service.'
+    ],
+    technologies: ['React', 'HTML', 'CSS', 'JavaScript', 'PHP', 'MySQL', 'XAMPP', 'ESP32', 'RC522', 'Visual Studio Code', 'Arduino IDE', 'GitHub'],
+    technologyGroups: {
+      'Frontend': 'React, HTML, CSS, JavaScript',
+      'Backend': 'PHP',
+      'Database': 'MySQL',
+      'Server Environment': 'XAMPP',
+      'Hardware': 'ESP32 Microcontroller, RC522 RFID Reader',
+      'Desktop Application': 'React-based interface',
+      'Development Tools': 'Visual Studio Code, Arduino IDE, GitHub'
+    },
+    contribution: 'Participated in the development of LabTrack, focusing on system design, user interface improvements, RFID authentication integration, database connectivity, and laboratory monitoring features. Contributed to creating an organized and user-friendly system for both administrators and students.',
+    objective: 'To develop a secure and efficient computer laboratory management system that automates student authentication, improves computer usage tracking, and reduces manual monitoring tasks for laboratory administrators.'
+  },
   grades: { title: 'Student Grade Management System', description: 'A Java-based application designed to manage student information, subjects, and academic grades using object-oriented programming principles.', scope: ['Organize student information and subjects', 'Manage academic grade records', 'Apply object-oriented programming to a structured application'], technologies: ['Java', 'Object-Oriented Programming'] },
   library: { title: 'Library Management System', description: 'A Java-based application that manages books, library members, borrowing records, and book returns through a structured management interface.', scope: ['Organize books and library members', 'Maintain borrowing and return records', 'Present library operations through a structured interface'], technologies: ['Java', 'Object-Oriented Programming'] }
 };
@@ -119,6 +145,15 @@ document.querySelectorAll('[data-project]').forEach(button => button.addEventLis
   dialogTrigger = button;
   document.querySelector('#dialog-title').textContent = project.title;
   document.querySelector('#dialog-description').textContent = project.description;
+  document.querySelector('#dialog-eyebrow').textContent = project.providedDetails ? 'PROJECT OVERVIEW' : 'PROJECT OVERVIEW · EXAMPLE CONTENT';
+  const projectType = document.querySelector('#dialog-type');
+  projectType.hidden = !project.type;
+  projectType.textContent = project.type || '';
+  document.querySelector('#dialog-placeholder-note').hidden = Boolean(project.providedDetails);
+  ['contribution', 'objective'].forEach(field => {
+    document.querySelector(`#dialog-${field}`).hidden = !project[field];
+    document.querySelector(`#dialog-${field}-text`).textContent = project[field] || '';
+  });
   const sourceImage = button.closest('article').querySelector('img');
   const modalImage = document.querySelector('#dialog-image');
   const fallbackImages = { labtrack: 'assets/images/project1.svg', grades: 'assets/images/project2.svg', library: 'assets/images/project3.svg', cafe: 'assets/images/cafe-website.svg', webproject: 'assets/images/web-project.svg' };
@@ -128,6 +163,17 @@ document.querySelectorAll('[data-project]').forEach(button => button.addEventLis
   const scope = document.querySelector('#dialog-scope');
   scope.replaceChildren(...project.scope.map(text => { const item = document.createElement('li'); item.textContent = text; return item; }));
   document.querySelector('#dialog-technologies').replaceChildren(...project.technologies.map(text => { const tag = document.createElement('span'); tag.textContent = text; return tag; }));
+  const groupedStack = document.querySelector('#dialog-stack-details');
+  groupedStack.replaceChildren();
+  groupedStack.hidden = !project.technologyGroups;
+  document.querySelector('#dialog-technologies').hidden = Boolean(project.technologyGroups);
+  if (project.technologyGroups) Object.entries(project.technologyGroups).forEach(([label, value]) => {
+    const term = document.createElement('dt');
+    term.textContent = label;
+    const detail = document.createElement('dd');
+    detail.textContent = value;
+    groupedStack.append(term, detail);
+  });
   const repository = document.querySelector('#dialog-repository');
   let liveWebsite = document.querySelector('#dialog-live');
   if (!liveWebsite) {
@@ -162,9 +208,9 @@ dialog.addEventListener('close', () => {
   if (document.activeElement === document.body || dialog.contains(document.activeElement)) dialogTrigger?.focus();
 });
 
-['github', 'linkedin', 'facebook'].forEach(profile => {
+['github', 'facebook'].forEach(profile => {
   if (!validPublicUrl(portfolio[profile])) return;
-  const profileNames = { github: 'GitHub', linkedin: 'LinkedIn', facebook: 'Facebook' };
+  const profileNames = { github: 'GitHub', facebook: 'Facebook' };
   document.querySelectorAll(`[data-profile="${profile}"]`).forEach(link => { link.href = portfolio[profile]; link.setAttribute('aria-label', `${profileNames[profile]} profile`); });
   const contactLink = document.createElement('a'); contactLink.href = portfolio[profile]; contactLink.textContent = portfolio[profile];
   document.querySelector(`#contact-${profile}`).replaceChildren(contactLink);
