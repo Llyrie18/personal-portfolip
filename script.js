@@ -10,16 +10,16 @@ const portfolio = {
 // Set each value to Beginner, Intermediate, or Advanced after self-assessment.
 // Empty values deliberately show an unrated bar rather than an invented level.
 const skillProficiency = {
-  HTML5: '',
-  CSS3: '',
-  JavaScript: '',
-  Java: '',
-  Python: '',
-  PHP: '',
-  MySQL: '',
-  Git: '',
-  'VS Code': '',
-  'Android Studio': ''
+  HTML5: 'Advanced',
+  CSS3: 'Advanced',
+  JavaScript: 'Advanced',
+  Java: 'Intermediate',
+  Python: 'Intermediate',
+  PHP: 'Advanced',
+  MySQL: 'Intermediate',
+  Git: 'Intermediate',
+  'VS Code': 'Intermediate',
+  'Android Studio': 'Intermediate'
 };
 const proficiencySteps = { Beginner: 1, Intermediate: 2, Advanced: 3 };
 document.querySelectorAll('.skill-tile').forEach(tile => {
