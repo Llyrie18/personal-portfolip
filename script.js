@@ -4,7 +4,7 @@ const portfolio = {
   email: '',
   github: '',
   linkedin: '',
-  repositories: { labtrack: '', grades: '', library: '' }
+  repositories: { labtrack: '', grades: '', library: '', cafe: '', webproject: '' }
 };
 
 // Set each value to Beginner, Intermediate, or Advanced after self-assessment.
@@ -102,6 +102,8 @@ updateScroll();
 topButton.addEventListener('click', () => { document.querySelector('.brand').focus({ preventScroll: true }); window.scrollTo({ top: 0, behavior: window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'instant' : 'smooth' }); });
 
 const projects = {
+  cafe: { title: 'Café Website', description: 'Website available at caferecontre.vercel.app. The official project title, description, and contribution details have not yet been provided.', scope: ['Project features and your contribution: to be added.'], technologies: ['Technology stack to be provided'], liveUrl: 'https://caferecontre.vercel.app/' },
+  webproject: { title: 'Web Project', description: 'Website available at vercel-live-20261031-182539.vercel.app. The project title, description, and contribution details have not yet been provided.', scope: ['Project features and your contribution: to be added.'], technologies: ['Technology stack to be provided'], liveUrl: 'https://vercel-live-20261031-182539.vercel.app/' },
   labtrack: { title: 'LabTrack — RFID-Based Computer Laboratory Tracking System', description: 'A computer laboratory monitoring system that uses RFID technology to authenticate students, track computer usage, and help administrators manage laboratory activities.', scope: ['RFID-based student authentication', 'Computer usage and laboratory activity tracking', 'Administrative monitoring of laboratory records'], technologies: ['HTML', 'CSS', 'JavaScript', 'PHP', 'MySQL', 'RFID', 'Arduino / ESP32'] },
   grades: { title: 'Student Grade Management System', description: 'A Java-based application designed to manage student information, subjects, and academic grades using object-oriented programming principles.', scope: ['Organize student information and subjects', 'Manage academic grade records', 'Apply object-oriented programming to a structured application'], technologies: ['Java', 'Object-Oriented Programming'] },
   library: { title: 'Library Management System', description: 'A Java-based application that manages books, library members, borrowing records, and book returns through a structured management interface.', scope: ['Organize books and library members', 'Maintain borrowing and return records', 'Present library operations through a structured interface'], technologies: ['Java', 'Object-Oriented Programming'] }
@@ -118,7 +120,7 @@ document.querySelectorAll('[data-project]').forEach(button => button.addEventLis
   document.querySelector('#dialog-description').textContent = project.description;
   const sourceImage = button.closest('article').querySelector('img');
   const modalImage = document.querySelector('#dialog-image');
-  const fallbackImages = { labtrack: 'assets/images/project1.svg', grades: 'assets/images/project2.svg', library: 'assets/images/project3.svg' };
+  const fallbackImages = { labtrack: 'assets/images/project1.svg', grades: 'assets/images/project2.svg', library: 'assets/images/project3.svg', cafe: 'assets/images/cafe-website.svg', webproject: 'assets/images/web-project.svg' };
   modalImage.onerror = () => { modalImage.onerror = null; modalImage.src = fallbackImages[button.dataset.project]; };
   modalImage.src = sourceImage.currentSrc || sourceImage.src;
   modalImage.alt = sourceImage.alt;
@@ -126,6 +128,24 @@ document.querySelectorAll('[data-project]').forEach(button => button.addEventLis
   scope.replaceChildren(...project.scope.map(text => { const item = document.createElement('li'); item.textContent = text; return item; }));
   document.querySelector('#dialog-technologies').replaceChildren(...project.technologies.map(text => { const tag = document.createElement('span'); tag.textContent = text; return tag; }));
   const repository = document.querySelector('#dialog-repository');
+  let liveWebsite = document.querySelector('#dialog-live');
+  if (!liveWebsite) {
+    liveWebsite = document.createElement('p');
+    liveWebsite.id = 'dialog-live';
+    repository.before(liveWebsite);
+  }
+  liveWebsite.replaceChildren();
+  liveWebsite.hidden = !validPublicUrl(project.liveUrl);
+  if (!liveWebsite.hidden) {
+    const link = document.createElement('a');
+    link.href = project.liveUrl;
+    link.target = '_blank';
+    link.rel = 'noopener noreferrer';
+    link.className = 'button primary';
+    link.textContent = 'Visit Live Website ↗';
+    link.setAttribute('aria-label', 'Visit live website (opens in a new tab)');
+    liveWebsite.append(link);
+  }
   repository.textContent = 'Repository URL has not been provided.';
   const url = portfolio.repositories[button.dataset.project];
   if (validPublicUrl(url)) { const link = document.createElement('a'); link.href = url; link.textContent = 'View GitHub repository ↗'; repository.replaceChildren(link); }
