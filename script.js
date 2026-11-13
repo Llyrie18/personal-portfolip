@@ -16,7 +16,7 @@ function setTheme(theme) {
   themeButton.setAttribute('aria-label', `Switch to ${theme === 'dark' ? 'light' : 'dark'} theme`);
   themeButton.firstElementChild.textContent = theme === 'dark' ? '☀' : '☾';
 }
-setTheme(storedTheme === 'light' ? 'light' : 'dark');
+setTheme(storedTheme === 'dark' ? 'dark' : 'light');
 themeButton.addEventListener('click', () => {
   setTheme(root.dataset.theme === 'dark' ? 'light' : 'dark');
   try { localStorage.setItem('portfolio-theme', root.dataset.theme); } catch { /* Keep the session preference. */ }
@@ -43,7 +43,7 @@ let scrollPending = false;
 function updateScroll() {
   let current = sections[0].id;
   for (const section of sections) if (section.getBoundingClientRect().top <= 160) current = section.id;
-  if (window.innerHeight + window.scrollY >= document.documentElement.scrollHeight - 8) current = 'contact';
+  if (window.scrollY > 0 && window.innerHeight + window.scrollY >= document.documentElement.scrollHeight - 8) current = 'contact';
   navLinks.forEach(link => {
     const active = link.hash === `#${current}`;
     link.classList.toggle('active', active);
@@ -131,3 +131,31 @@ form.addEventListener('submit', event => {
   status.textContent = 'An email draft was requested. If your email app opens, review and send the draft there. This website has not sent your message.';
 });
 document.querySelector('#year').textContent = new Date().getFullYear();
+
+// Native details elements provide keyboard-operable education and skill panels.
+document.querySelector('a[href="#education-details"]').addEventListener('click', () => {
+  document.querySelector('#education-details').open = true;
+});
+const projectGuideButton = document.querySelector('#view-projects');
+projectGuideButton.addEventListener('click', () => {
+  const guide = document.querySelector('#project-guide');
+  guide.hidden = !guide.hidden;
+  projectGuideButton.setAttribute('aria-expanded', String(!guide.hidden));
+  projectGuideButton.textContent = guide.hidden ? 'View All ↗' : 'Show Less ↑';
+});
+const achievementDialog = document.querySelector('#achievement-dialog');
+const achievementTrigger = document.querySelector('#view-achievements');
+achievementTrigger.addEventListener('click', () => {
+  achievementDialog.showModal();
+  document.body.style.overflow = 'hidden';
+});
+document.querySelector('#close-achievements').addEventListener('click', () => achievementDialog.close());
+achievementDialog.addEventListener('click', event => {
+  const box = achievementDialog.getBoundingClientRect();
+  if (event.clientX < box.left || event.clientX > box.right || event.clientY < box.top || event.clientY > box.bottom) achievementDialog.close();
+});
+achievementDialog.addEventListener('close', () => {
+  document.body.style.overflow = '';
+  achievementTrigger.focus();
+});
+if (configuredEmail) document.querySelectorAll('[data-email]').forEach(link => { link.href = `mailto:${portfolio.email}`; });
