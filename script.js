@@ -8,6 +8,17 @@ const portfolio = {
 };
 
 const root = document.documentElement;
+// Keep recognizable icons visible when the external icon font is unavailable.
+const iconFallbacks = { 'fa-html5': '5', 'fa-css3-alt': '3', 'fa-js': 'JS', 'fa-java': '♨', 'fa-python': 'Py', 'fa-php': 'php', 'fa-database': '▤', 'fa-git-alt': '◇', 'fa-graduation-cap': '◇', 'fa-building-columns': '⌂', 'fa-calendar': '▦', 'fa-award': '☆', 'fa-certificate': '▧', 'fa-envelope': '✉', 'fa-github': 'GH', 'fa-linkedin-in': 'in', 'fa-location-dot': '⌖' };
+document.querySelectorAll('i[class*="fa-"]').forEach(icon => {
+  const key = Object.keys(iconFallbacks).find(name => icon.classList.contains(name));
+  icon.dataset.symbol = iconFallbacks[key] || '•';
+});
+root.classList.add('fallback-icons');
+if (document.fonts) document.fonts.ready.then(() => {
+  const iconFontsLoaded = [...document.fonts].some(font => font.family.includes('Font Awesome') && font.status === 'loaded');
+  if (iconFontsLoaded) root.classList.remove('fallback-icons');
+});
 const themeButton = document.querySelector('#theme-toggle');
 let storedTheme;
 try { storedTheme = localStorage.getItem('portfolio-theme'); } catch { /* Storage may be blocked. */ }
@@ -33,7 +44,7 @@ menuButton.addEventListener('click', () => {
 navigation.querySelectorAll('a').forEach(link => link.addEventListener('click', closeMenu));
 document.addEventListener('keydown', event => { if (event.key === 'Escape' && navigation.classList.contains('open')) { closeMenu(); menuButton.focus(); } });
 document.addEventListener('click', event => { if (!event.target.closest('.header')) closeMenu(); });
-window.matchMedia('(min-width: 761px)').addEventListener('change', event => { if (event.matches) closeMenu(); });
+window.matchMedia('(min-width: 768px)').addEventListener('change', event => { if (event.matches) closeMenu(); });
 
 // One scroll calculation consistently selects the last section above the header.
 const sections = [...document.querySelectorAll('main section[id]')];
@@ -55,15 +66,7 @@ function updateScroll() {
 window.addEventListener('scroll', () => { if (!scrollPending) { scrollPending = true; requestAnimationFrame(updateScroll); } }, { passive: true });
 window.addEventListener('resize', updateScroll);
 updateScroll();
-topButton.addEventListener('click', () => { window.scrollTo({ top: 0, behavior: window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'instant' : 'smooth' }); document.querySelector('.brand').focus({ preventScroll: true }); });
-
-if ('IntersectionObserver' in window) {
-  root.classList.add('js');
-  const revealObserver = new IntersectionObserver(entries => entries.forEach(entry => {
-    if (entry.isIntersecting) { entry.target.classList.add('visible'); revealObserver.unobserve(entry.target); }
-  }), { threshold: 0.08 });
-  document.querySelectorAll('.reveal').forEach(element => revealObserver.observe(element));
-}
+topButton.addEventListener('click', () => { document.querySelector('.brand').focus({ preventScroll: true }); window.scrollTo({ top: 0, behavior: window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'instant' : 'smooth' }); });
 
 const projects = {
   labtrack: { title: 'LabTrack — RFID-Based Computer Laboratory Tracking System', description: 'A computer laboratory monitoring system that uses RFID technology to authenticate students, track computer usage, and help administrators manage laboratory activities.', scope: ['RFID-based student authentication', 'Computer usage and laboratory activity tracking', 'Administrative monitoring of laboratory records'], technologies: ['HTML', 'CSS', 'JavaScript', 'PHP', 'MySQL', 'RFID', 'Arduino / ESP32'] },
@@ -80,6 +83,12 @@ document.querySelectorAll('[data-project]').forEach(button => button.addEventLis
   dialogTrigger = button;
   document.querySelector('#dialog-title').textContent = project.title;
   document.querySelector('#dialog-description').textContent = project.description;
+  const sourceImage = button.closest('article').querySelector('img');
+  const modalImage = document.querySelector('#dialog-image');
+  const fallbackImages = { labtrack: 'assets/images/project1.svg', grades: 'assets/images/project2.svg', library: 'assets/images/project3.svg' };
+  modalImage.onerror = () => { modalImage.onerror = null; modalImage.src = fallbackImages[button.dataset.project]; };
+  modalImage.src = sourceImage.currentSrc || sourceImage.src;
+  modalImage.alt = sourceImage.alt;
   const scope = document.querySelector('#dialog-scope');
   scope.replaceChildren(...project.scope.map(text => { const item = document.createElement('li'); item.textContent = text; return item; }));
   document.querySelector('#dialog-technologies').replaceChildren(...project.technologies.map(text => { const tag = document.createElement('span'); tag.textContent = text; return tag; }));
@@ -92,7 +101,12 @@ document.querySelectorAll('[data-project]').forEach(button => button.addEventLis
 }));
 document.querySelector('#close-dialog').addEventListener('click', () => dialog.close());
 dialog.addEventListener('click', event => { const box = dialog.getBoundingClientRect(); if (event.clientX < box.left || event.clientX > box.right || event.clientY < box.top || event.clientY > box.bottom) dialog.close(); });
-dialog.addEventListener('close', () => { document.body.style.overflow = ''; dialogTrigger?.focus(); });
+dialog.addEventListener('close', () => {
+  document.body.style.overflow = '';
+  // Native dialogs normally restore focus. Only supply a fallback if focus was
+  // lost; a queued close event must not pull focus away from another control.
+  if (document.activeElement === document.body || dialog.contains(document.activeElement)) dialogTrigger?.focus();
+});
 
 ['github', 'linkedin'].forEach(profile => {
   if (!validPublicUrl(portfolio[profile])) return;
@@ -100,7 +114,6 @@ dialog.addEventListener('close', () => { document.body.style.overflow = ''; dial
   const contactLink = document.createElement('a'); contactLink.href = portfolio[profile]; contactLink.textContent = portfolio[profile];
   document.querySelector(`#contact-${profile}`).replaceChildren(contactLink);
 });
-if (validPublicUrl(portfolio.github) && validPublicUrl(portfolio.linkedin)) document.querySelector('.social-note').hidden = true;
 const configuredEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(portfolio.email) && !/[\r\n]/.test(portfolio.email);
 if (configuredEmail) {
   const link = document.createElement('a'); link.href = `mailto:${portfolio.email}`; link.textContent = portfolio.email;
@@ -132,30 +145,4 @@ form.addEventListener('submit', event => {
 });
 document.querySelector('#year').textContent = new Date().getFullYear();
 
-// Native details elements provide keyboard-operable education and skill panels.
-document.querySelector('a[href="#education-details"]').addEventListener('click', () => {
-  document.querySelector('#education-details').open = true;
-});
-const projectGuideButton = document.querySelector('#view-projects');
-projectGuideButton.addEventListener('click', () => {
-  const guide = document.querySelector('#project-guide');
-  guide.hidden = !guide.hidden;
-  projectGuideButton.setAttribute('aria-expanded', String(!guide.hidden));
-  projectGuideButton.textContent = guide.hidden ? 'View All ↗' : 'Show Less ↑';
-});
-const achievementDialog = document.querySelector('#achievement-dialog');
-const achievementTrigger = document.querySelector('#view-achievements');
-achievementTrigger.addEventListener('click', () => {
-  achievementDialog.showModal();
-  document.body.style.overflow = 'hidden';
-});
-document.querySelector('#close-achievements').addEventListener('click', () => achievementDialog.close());
-achievementDialog.addEventListener('click', event => {
-  const box = achievementDialog.getBoundingClientRect();
-  if (event.clientX < box.left || event.clientX > box.right || event.clientY < box.top || event.clientY > box.bottom) achievementDialog.close();
-});
-achievementDialog.addEventListener('close', () => {
-  document.body.style.overflow = '';
-  achievementTrigger.focus();
-});
 if (configuredEmail) document.querySelectorAll('[data-email]').forEach(link => { link.href = `mailto:${portfolio.email}`; });
