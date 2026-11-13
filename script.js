@@ -121,7 +121,7 @@ const projects = {
     contribution: 'Contributed to the design and development of Smart Budget by creating its mobile interface, organizing the authentication screens, designing the financial dashboard, and implementing user-friendly navigation. Focused on providing a simple and organized experience for managing personal finances.',
     objective: 'To develop a user-friendly personal finance application that helps users track their income, monitor expenses, manage budgets, and develop better financial habits.',
     gallery: [
-      { src: 'assets/images/smart-budget/login.png', title: 'Login', alt: 'Smart Budget login screen with email, password, show password option, and create account navigation' },
+      { src: 'assets/projects/smart.png', title: 'Login', alt: 'Smart Budget login screen with email, password, show password option, and create account navigation' },
       { src: 'assets/images/smart-budget/registration.png', title: 'Registration', alt: 'Smart Budget registration screen with full name, email, password, and password confirmation' },
       { src: 'assets/images/smart-budget/dashboard.png', title: 'Dashboard', alt: 'Smart Budget dashboard with balance, income, expenses, quick actions, monthly budget, and bottom navigation' }
     ]
