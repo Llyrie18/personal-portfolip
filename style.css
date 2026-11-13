@@ -1,18 +1,29 @@
 /* Simple card layout: edit these tokens to change the complete color system. */
 :root{
-  --blue:#1355e8;
-  --navy:#10182f;
-  --bg:#f1f4f9;
+  --blue:#2563eb;
+  --purple:#7c3aed;
+  --indigo:#6366f1;
+  --lavender:#f3e8ff;
+  --gradient:linear-gradient(135deg,#2563eb,#7c3aed);
+  --text-gradient:var(--gradient);
+  --hero-background:linear-gradient(125deg,#eff6ff,#faf5ff);
+  --navy:#0f172a;
+  --bg:#f8f9ff;
   --card:#fff;
-  --text:#10182f;
+  --text:#0f172a;
   --muted:#64748b;
-  --light:#e8f0ff;
-  --border:#e0e7f0;
-  --shadow:0 4px 18px #20365a05;
+  --light:#dbeafe;
+  --border:#e4e6f5;
+  --shadow:0 5px 22px #6353a009;
   --radius:15px}
 
 [data-theme=dark]{
   --blue:#8cafff;
+  --purple:#c4a5ff;
+  --indigo:#a5a6ff;
+  --lavender:#302344;
+  --hero-background:linear-gradient(125deg,#182b47,#2c203d);
+  --text-gradient:linear-gradient(135deg,#93c5fd,#d8b4fe);
   --navy:#f0f4ff;
   --bg:#10182a;
   --card:#192339;
@@ -194,12 +205,13 @@ h1{
   transform:translateY(-2px);
   box-shadow:0 4px 12px #1355e820}
 .primary{
-  background:#1355e8;
+  background:var(--gradient);
   color:#fff;
-  border-color:#1355e8}
+  border-color:transparent}
 .secondary{
   background:var(--card);
-  color:var(--blue)}
+  color:var(--purple);
+  border-color:var(--purple)}
 .button span{
   font-size:17px}
 .intro-note{
@@ -806,4 +818,145 @@ h1{
   font-style:normal}
 .fallback-icons .footer-social i{
   font-size:14px}
+
+/* Blue and purple visual layer. Grid structure, spacing and content stay intact. */
+.header {
+  box-shadow: 0 5px 24px #6366f10c;
+}
+.brand, .brand .accent, .intro h1, .intro h1 .accent {
+  background: var(--text-gradient);
+  background-clip: text;
+  -webkit-background-clip: text;
+  color: transparent;
+}
+.header nav a {
+  transition: color .18s;
+}
+.header nav a.active, .header nav a:hover {
+  color: var(--purple);
+}
+.header nav a.active::after {
+  background: var(--purple);
+}
+.home-card {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  background: var(--hero-background);
+}
+.home-card::before, .home-card::after {
+  content: '';
+  position: absolute;
+  width: 230px;
+  height: 230px;
+  border-radius: 50%;
+  pointer-events: none;
+  background: var(--gradient);
+  opacity: .045;
+  z-index: -1;
+}
+.home-card::before { right: -85px; top: -130px; }
+.home-card::after { right: 120px; bottom: -190px; }
+.profile-container {
+  border-color: color-mix(in srgb, var(--purple) 30%, var(--border));
+  box-shadow: 0 0 32px #7c3aed22;
+}
+.section-title::before {
+  background: var(--gradient);
+}
+.education-list > div {
+  background: var(--lavender);
+  border-radius: 9px;
+}
+.education-list .detail-icon {
+  color: var(--purple);
+  background: transparent;
+}
+.education-list > div:nth-child(2) .detail-icon {
+  color: var(--blue);
+}
+.skill-tile:nth-child(odd) { background: var(--light); }
+.skill-tile:nth-child(even) { background: var(--lavender); }
+.skill-tile:hover {
+  border-color: var(--blue);
+  box-shadow: 0 7px 18px #2563eb12;
+}
+.skill-tile:nth-child(even):hover { border-color: var(--purple); }
+.project-card {
+  --project-accent: var(--blue);
+  --project-soft: var(--light);
+  border-color: color-mix(in srgb, var(--project-accent) 25%, var(--border));
+  background: color-mix(in srgb, var(--project-soft) 28%, var(--card));
+}
+.project-card:nth-child(2) {
+  --project-accent: var(--purple);
+  --project-soft: var(--lavender);
+}
+.project-card:nth-child(3) {
+  --project-accent: var(--indigo);
+  --project-soft: color-mix(in srgb, var(--light), var(--lavender));
+}
+.project-card > img {
+  box-shadow: 0 3px 0 var(--project-accent);
+  background: var(--project-soft);
+}
+.project-card h3 {
+  color: color-mix(in srgb, var(--project-accent) 85%, var(--text));
+}
+.project-card .tags span {
+  color: color-mix(in srgb, var(--project-accent) 85%, var(--text));
+  background: var(--project-soft);
+}
+.project-card:hover {
+  border-color: var(--project-accent);
+  box-shadow: 0 8px 22px #6366f114;
+}
+.project-link {
+  background: var(--gradient);
+  border-top-color: transparent;
+  color: #fff;
+  border-radius: 7px;
+  padding: 6px 12px;
+}
+.project-link:hover { text-decoration: none; filter: brightness(1.08); }
+.achievement-row {
+  transition: box-shadow .18s, background .18s;
+  border-radius: 8px;
+}
+.achievement-row:hover {
+  box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--purple) 30%, var(--border));
+  background: color-mix(in srgb, var(--lavender) 20%, var(--card));
+}
+.achievement-row:nth-child(2) .achievement-icon {
+  color: var(--purple);
+  background: var(--lavender);
+}
+.achievement-row:nth-child(3) .achievement-icon {
+  color: var(--indigo);
+  background: color-mix(in srgb, var(--light), var(--lavender));
+}
+#contact {
+  background: linear-gradient(120deg, color-mix(in srgb, var(--light) 22%, var(--card)), color-mix(in srgb, var(--lavender) 28%, var(--card)));
+}
+.contact-list > div:nth-child(even) .detail-icon {
+  color: var(--purple);
+  background: var(--lavender);
+}
+input:focus, textarea:focus {
+  border-color: var(--purple);
+  outline-color: var(--purple);
+}
+.footer {
+  background: color-mix(in srgb, var(--lavender) 45%, var(--bg));
+  border-radius: 0 0 var(--radius) var(--radius);
+}
+.footer-social a { transition: color .18s; }
+.footer-social a:hover { color: var(--blue); }
+.footer-social a:nth-child(even):hover { color: var(--purple); }
+@media (forced-colors: active) {
+  .brand, .brand .accent, .intro h1, .intro h1 .accent {
+    background: none;
+    color: CanvasText;
+  }
+}
 
