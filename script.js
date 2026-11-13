@@ -4,7 +4,7 @@ const portfolio = {
   email: 'Eirelltampoc18@gmail.com',
   github: 'https://github.com/Llyrie18',
   facebook: 'https://www.facebook.com/Eiryll18',
-  repositories: { labtrack: '', grades: '', library: '', cafe: '', webproject: '' }
+  repositories: { labtrack: '', cafe: '', smartbudget: '' }
 };
 
 // Set each value to Beginner, Intermediate, or Advanced after self-assessment.
@@ -145,7 +145,6 @@ const projects = {
     objective: 'To create a modern and responsive café website that allows customers to explore the menu, learn about the business, and access ordering and location information conveniently.',
     liveUrl: 'https://caferecontre.vercel.app/'
   },
-  webproject: { title: 'Web Project', description: 'Website available at vercel-live-20261031-182539.vercel.app. The project title, description, and contribution details have not yet been provided.', scope: ['Project features and your contribution: to be added.'], technologies: ['Technology stack to be provided'], liveUrl: 'https://vercel-live-20261031-182539.vercel.app/' },
   labtrack: {
     title: 'LabTrack — RFID-Based Computer Laboratory Monitoring System',
     type: 'Capstone Project / System Development',
@@ -174,8 +173,6 @@ const projects = {
     contribution: 'Participated in the development of LabTrack, focusing on system design, user interface improvements, RFID authentication integration, database connectivity, and laboratory monitoring features. Contributed to creating an organized and user-friendly system for both administrators and students.',
     objective: 'To develop a secure and efficient computer laboratory management system that automates student authentication, improves computer usage tracking, and reduces manual monitoring tasks for laboratory administrators.'
   },
-  grades: { title: 'Student Grade Management System', description: 'A Java-based application designed to manage student information, subjects, and academic grades using object-oriented programming principles.', scope: ['Organize student information and subjects', 'Manage academic grade records', 'Apply object-oriented programming to a structured application'], technologies: ['Java', 'Object-Oriented Programming'] },
-  library: { title: 'Library Management System', description: 'A Java-based application that manages books, library members, borrowing records, and book returns through a structured management interface.', scope: ['Organize books and library members', 'Maintain borrowing and return records', 'Present library operations through a structured interface'], technologies: ['Java', 'Object-Oriented Programming'] }
 };
 function validPublicUrl(value) {
   try { return new URL(value).protocol === 'https:'; } catch { return false; }
@@ -279,7 +276,7 @@ document.querySelectorAll('[data-project]').forEach(button => button.addEventLis
   });
   const sourceImage = button.closest('article').querySelector('img');
   const modalImage = document.querySelector('#dialog-image');
-  const fallbackImages = { labtrack: 'assets/images/project1.svg', grades: 'assets/images/project2.svg', library: 'assets/images/project3.svg', cafe: 'assets/images/cafe-website.svg', webproject: 'assets/images/web-project.svg', smartbudget: pendingScreenshot };
+  const fallbackImages = { labtrack: 'assets/images/project1.svg', cafe: 'assets/images/cafe-website.svg', smartbudget: pendingScreenshot };
   modalImage.onerror = () => { modalImage.onerror = null; modalImage.src = fallbackImages[button.dataset.project]; };
   modalImage.src = sourceImage.currentSrc || sourceImage.src;
   modalImage.alt = sourceImage.alt;
