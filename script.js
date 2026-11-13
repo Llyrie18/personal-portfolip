@@ -102,7 +102,25 @@ updateScroll();
 topButton.addEventListener('click', () => { document.querySelector('.brand').focus({ preventScroll: true }); window.scrollTo({ top: 0, behavior: window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'instant' : 'smooth' }); });
 
 const projects = {
-  cafe: { title: 'Café Website', description: 'Website available at caferecontre.vercel.app. The official project title, description, and contribution details have not yet been provided.', scope: ['Project features and your contribution: to be added.'], technologies: ['Technology stack to be provided'], liveUrl: 'https://caferecontre.vercel.app/' },
+  cafe: {
+    title: 'Café Rencontre',
+    type: '2025 · CAFÉ WEBSITE · Role: UI Design',
+    providedDetails: true,
+    description: "Café Rencontre is a coffee shop website designed to provide customers with a convenient and enjoyable online experience. Visitors can explore the café's menu, learn about the shop, read customer reviews, find its location, and place orders. The website features a warm, coffee-inspired design with a user-friendly interface and responsive layout.",
+    scope: [
+      'Interactive Menu: Allows customers to browse available coffee, beverages, and food.',
+      'About Us Section: Provides information about the café and its background.',
+      'Customer Reviews: Displays customer feedback and experiences.',
+      "Location Information: Helps visitors find the café's location.",
+      'Online Ordering: Includes an "Order Now" button for placing orders.',
+      'Responsive Design: Provides a smooth browsing experience on desktop and mobile devices.',
+      'Modern UI: Features a warm coffee-themed design with a full-screen hero image.'
+    ],
+    technologies: ['HTML', 'CSS', 'JavaScript', 'Vercel'],
+    contribution: 'Designed the user interface of Café Rencontre, focusing on creating a clean, visually appealing, and easy-to-navigate website. Contributed to organizing the website layout, choosing suitable colors, and improving the overall user experience.',
+    objective: 'To create a modern and responsive café website that allows customers to explore the menu, learn about the business, and access ordering and location information conveniently.',
+    liveUrl: 'https://caferecontre.vercel.app/'
+  },
   webproject: { title: 'Web Project', description: 'Website available at vercel-live-20261031-182539.vercel.app. The project title, description, and contribution details have not yet been provided.', scope: ['Project features and your contribution: to be added.'], technologies: ['Technology stack to be provided'], liveUrl: 'https://vercel-live-20261031-182539.vercel.app/' },
   labtrack: {
     title: 'LabTrack — RFID-Based Computer Laboratory Monitoring System',
