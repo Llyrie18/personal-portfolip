@@ -7,6 +7,37 @@ const portfolio = {
   repositories: { labtrack: '', grades: '', library: '' }
 };
 
+// Set each value to Beginner, Intermediate, or Advanced after self-assessment.
+// Empty values deliberately show an unrated bar rather than an invented level.
+const skillProficiency = {
+  HTML5: '',
+  CSS3: '',
+  JavaScript: '',
+  Java: '',
+  Python: '',
+  PHP: '',
+  MySQL: '',
+  Git: ''
+};
+const proficiencySteps = { Beginner: 1, Intermediate: 2, Advanced: 3 };
+document.querySelectorAll('.skill-tile').forEach(tile => {
+  const name = tile.querySelector('span').textContent;
+  const configuredLevel = skillProficiency[name];
+  const level = Object.hasOwn(proficiencySteps, configuredLevel) ? configuredLevel : 'Not rated';
+  const track = document.createElement('div');
+  track.className = 'proficiency-track';
+  track.setAttribute('role', 'img');
+  track.setAttribute('aria-label', `${name} proficiency: ${level}`);
+  const fill = document.createElement('span');
+  fill.className = 'proficiency-fill';
+  fill.style.width = `${((proficiencySteps[level] || 0) / 3) * 100}%`;
+  track.append(fill);
+  const label = document.createElement('span');
+  label.className = 'proficiency-label';
+  label.textContent = level;
+  tile.append(track, label);
+});
+
 const root = document.documentElement;
 // Keep recognizable icons visible when the external icon font is unavailable.
 const iconFallbacks = { 'fa-html5': '5', 'fa-css3-alt': '3', 'fa-js': 'JS', 'fa-java': '♨', 'fa-python': 'Py', 'fa-php': 'php', 'fa-database': '▤', 'fa-git-alt': '◇', 'fa-graduation-cap': '◇', 'fa-building-columns': '⌂', 'fa-calendar': '▦', 'fa-award': '☆', 'fa-certificate': '▧', 'fa-envelope': '✉', 'fa-github': 'GH', 'fa-linkedin-in': 'in', 'fa-location-dot': '⌖' };
