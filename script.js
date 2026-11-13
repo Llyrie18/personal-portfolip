@@ -1,8 +1,9 @@
 /* Replace these values with your real public contact details. Empty values keep
    explicit placeholders instead of creating fabricated profile links. */
 const portfolio = {
-  email: '',
-  github: '',
+  email: 'Eirelltampoc18@gmail.com',
+  github: 'https://github.com/Llyrie18',
+  facebook: 'https://www.facebook.com/Eiryll18',
   linkedin: '',
   repositories: { labtrack: '', grades: '', library: '', cafe: '', webproject: '' }
 };
@@ -42,7 +43,7 @@ document.querySelectorAll('.skill-tile').forEach(tile => {
 
 const root = document.documentElement;
 // Keep recognizable icons visible when the external icon font is unavailable.
-const iconFallbacks = { 'fa-code': '</>', 'fa-android': 'A', 'fa-html5': '5', 'fa-css3-alt': '3', 'fa-js': 'JS', 'fa-java': '♨', 'fa-python': 'Py', 'fa-php': 'php', 'fa-database': '▤', 'fa-git-alt': '◇', 'fa-graduation-cap': '◇', 'fa-building-columns': '⌂', 'fa-calendar': '▦', 'fa-award': '☆', 'fa-certificate': '▧', 'fa-envelope': '✉', 'fa-github': 'GH', 'fa-linkedin-in': 'in', 'fa-location-dot': '⌖' };
+const iconFallbacks = { 'fa-facebook-f': 'f', 'fa-code': '</>', 'fa-android': 'A', 'fa-html5': '5', 'fa-css3-alt': '3', 'fa-js': 'JS', 'fa-java': '♨', 'fa-python': 'Py', 'fa-php': 'php', 'fa-database': '▤', 'fa-git-alt': '◇', 'fa-graduation-cap': '◇', 'fa-building-columns': '⌂', 'fa-calendar': '▦', 'fa-award': '☆', 'fa-certificate': '▧', 'fa-envelope': '✉', 'fa-github': 'GH', 'fa-linkedin-in': 'in', 'fa-location-dot': '⌖' };
 document.querySelectorAll('i[class*="fa-"]').forEach(icon => {
   const key = Object.keys(iconFallbacks).find(name => icon.classList.contains(name));
   icon.dataset.symbol = iconFallbacks[key] || '•';
@@ -161,9 +162,10 @@ dialog.addEventListener('close', () => {
   if (document.activeElement === document.body || dialog.contains(document.activeElement)) dialogTrigger?.focus();
 });
 
-['github', 'linkedin'].forEach(profile => {
+['github', 'linkedin', 'facebook'].forEach(profile => {
   if (!validPublicUrl(portfolio[profile])) return;
-  document.querySelectorAll(`[data-profile="${profile}"]`).forEach(link => { link.href = portfolio[profile]; link.setAttribute('aria-label', `${profile === 'github' ? 'GitHub' : 'LinkedIn'} profile`); });
+  const profileNames = { github: 'GitHub', linkedin: 'LinkedIn', facebook: 'Facebook' };
+  document.querySelectorAll(`[data-profile="${profile}"]`).forEach(link => { link.href = portfolio[profile]; link.setAttribute('aria-label', `${profileNames[profile]} profile`); });
   const contactLink = document.createElement('a'); contactLink.href = portfolio[profile]; contactLink.textContent = portfolio[profile];
   document.querySelector(`#contact-${profile}`).replaceChildren(contactLink);
 });
